@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
-const moviesRouter = require('./routes/api/movies');
+const moviesRouter = require('./routes/api/movies-router');
 const contactsRouter = require('./routes/api/contacts');
 
 const app = express();
