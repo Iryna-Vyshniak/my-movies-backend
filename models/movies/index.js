@@ -43,10 +43,11 @@ const updateMovieById = async (id, data) => {
 
 const deleteMovieById = async (id) => {
   const movies = await getAllMovies();
-  const index = movies.findIndex((m) => m.id === id);
-  if (index === -1) return null;
-
-  const [result] = movies.slice(index, 1);
+  const index = movies.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = movies.splice(index, 1);
   await updateMovies(movies);
   return result;
 };
