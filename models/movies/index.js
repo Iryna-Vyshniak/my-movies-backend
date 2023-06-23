@@ -5,7 +5,7 @@ const { randomUUID } = require('crypto');
 const moviesPath = path.join(__dirname, 'movies.json');
 
 const updateMovies = async (movies) => {
-  return await fs.writeFile(moviesPath, JSON.stringify(movies));
+  return await fs.writeFile(moviesPath, JSON.stringify(movies, null, 2));
 };
 
 const getAllMovies = async () => {
