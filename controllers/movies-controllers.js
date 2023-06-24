@@ -1,5 +1,3 @@
-const Joi = require('joi');
-
 const moviesService = require('../models/movies');
 
 const { HttpError } = require('../helpers');
