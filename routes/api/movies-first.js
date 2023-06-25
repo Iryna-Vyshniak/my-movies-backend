@@ -1,22 +1,22 @@
 const express = require('express');
-// const Joi = require('joi');
+const Joi = require('joi');
 
-// const {
-//   getAllMovies,
-//   getMovieById,
-//   addMovie,
-//   updateMovieById,
-//   deleteMovieById,
-// } = require('../../models/movies/index');
+const {
+  getAllMovies,
+  getMovieById,
+  addMovie,
+  updateMovieById,
+  deleteMovieById,
+} = require('../../models/movies/index');
 
-// const { HttpError } = require('../../helpers');
+const { HttpError } = require('../../helpers');
 
 const router = express.Router();
 
-// const movieAddSchema = Joi.object({
-//   title: Joi.string().required(),
-//   director: Joi.string().required().messages({ 'any.required': `director must be exists` }),
-// });
+const movieAddSchema = Joi.object({
+  title: Joi.string().required(),
+  director: Joi.string().required().messages({ 'any.required': `director must be exists` }),
+});
 
 //  '/' => /api/movies/
 router.get('/', async (req, res, next) => {
