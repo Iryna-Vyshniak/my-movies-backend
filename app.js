@@ -3,6 +3,8 @@ const logger = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 
+// import auth router
+const authRouter = require('./routes/api/auth');
 const moviesRouter = require('./routes/api/movies-router');
 
 const app = express();
@@ -13,6 +15,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+// add router for auth
+app.use('/api/auth', authRouter);
 app.use('/api/movies', moviesRouter);
 
 app.use((req, res) => {
