@@ -3,7 +3,8 @@ const Joi = require('joi');
 
 const { handleMongooseError } = require('../helpers');
 
-const genreList = ['fantastic', 'love'];
+// add genres
+const genreList = ['fantastic', 'love', 'crime', 'drama'];
 const dateRegexp = /^\d{2}-\d{2}-\d{4}$/; // 16-01-2023
 
 const movieSchema = new Schema(
@@ -28,6 +29,12 @@ const movieSchema = new Schema(
     date: {
       type: String,
       match: dateRegexp,
+      required: true,
+    },
+    // add owner
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
       required: true,
     },
   },
