@@ -8,12 +8,18 @@ const { ctrlWrapper } = require('../decorators');
 
 // add movie`s owner and get movies who added them
 // add populate() - інструмент пошуку для поширення запиту - в колекції знаходить поле owner і замінює його розширеними даними
+// req.query => all params query
+// add pagination http://localhost:3000/api/movies?page=5&limit=10 => 5 сторінка з 10 movies
+// skip => скільки фільмів пропустити з самого початку всього
+// limit - скільки повернути
 const getAllMovies = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const result = await Movie.find({ owner }, '-createdAt -updatedAt').populate(
-    'owner',
-    'name email'
-  );
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Movie.find({ owner }, '-createdAt -updatedAt', {
+    skip,
+    limit,
+  }).populate('owner', 'name email');
   res.json(result);
 };
 
