@@ -111,14 +111,25 @@ const login = async (req, res) => {
   });
 };
 
+//  GET http://localhost:3000/api/auth/current
 const getCurrent = async (req, res) => {
   const { name, email } = req.user;
 
   res.json({ name, email });
 };
 
+// POST http://localhost:3000/api/auth/logout
+const logout = async (req, res) => {
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { token: '' });
+
+  res.json({ message: 'Logout success' });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
 };
