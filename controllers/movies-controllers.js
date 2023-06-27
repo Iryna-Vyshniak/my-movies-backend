@@ -6,8 +6,10 @@ const { HttpError } = require('../helpers');
 
 const { ctrlWrapper } = require('../decorators');
 
+// add movie`s owner and get movies who added them
 const getAllMovies = async (req, res, next) => {
-  const result = await Movie.find({}, '-createdAt -updatedAt');
+  const { _id: owner } = req.user;
+  const result = await Movie.find({ owner }, '-createdAt -updatedAt');
   res.json(result);
 };
 
@@ -21,8 +23,10 @@ const getMovieById = async (req, res, next) => {
   res.json(result);
 };
 
+// add id owner for every add movies
 const addMovie = async (req, res, next) => {
-  const result = await Movie.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Movie.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
