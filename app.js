@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // import auth router
-const authRouter = require('./routes/api/auth');
+const authRouter = require('./routes/api/auth-router');
 const moviesRouter = require('./routes/api/movies-router');
 
 const app = express();
