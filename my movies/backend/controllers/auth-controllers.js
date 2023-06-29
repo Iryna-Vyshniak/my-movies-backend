@@ -70,11 +70,19 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const result = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({ ...req.body, password: hashPassword });
 
+  // add token
+  const { _id: id } = newUser;
+
+  const payload = {
+    id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2 days' });
   res.status(201).json({
-    name: result.name,
-    email: result.email,
+    token,
+    user: { name: newUser.name, email: newUser.email },
   });
 };
 
@@ -100,22 +108,27 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  console.log(payload);
+  // console.log(payload);
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2 days' });
   // console.log(token);
   await User.findByIdAndUpdate(user._id, { token });
 
+  // refactor
   res.json({
     token,
+    user: { name: user.name, email: user.email },
   });
 };
 
 //  GET http://localhost:3000/api/auth/current
 const getCurrent = async (req, res) => {
-  const { name, email } = req.user;
+  const { token, name, email } = req.user;
 
-  res.json({ name, email });
+  res.json({
+    token,
+    user: { name, email },
+  });
 };
 
 // POST http://localhost:3000/api/auth/logout
