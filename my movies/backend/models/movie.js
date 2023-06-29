@@ -5,7 +5,7 @@ const { handleMongooseError } = require('../helpers');
 
 // add genres
 const genreList = ['fantastic', 'love', 'crime', 'drama'];
-const dateRegexp = /^\d{2}-\d{2}-\d{4}$/; // 16-01-2023
+const releaseDateRegexp = /^\d{4}$/; // 16-01-2023
 
 const movieSchema = new Schema(
   {
@@ -26,12 +26,11 @@ const movieSchema = new Schema(
       enum: genreList,
       required: true,
     },
-    date: {
+    releaseDate: {
       type: String,
-      match: dateRegexp,
+      match: releaseDateRegexp,
       required: true,
     },
-    // add owner
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',
@@ -45,12 +44,15 @@ movieSchema.post('save', handleMongooseError);
 
 const movieAddSchema = Joi.object({
   title: Joi.string().required(),
-  director: Joi.string().required().messages({ 'any.required': `director must be exists` }),
+  director: Joi.string().required().messages({
+    'any.required': `"director" must be exist`,
+    'string.base': `"director" must be text`,
+  }),
   favorite: Joi.boolean(),
   genre: Joi.string()
     .valid(...genreList)
     .required(),
-  date: Joi.string().pattern(dateRegexp).required(),
+  releaseDate: Joi.string().pattern(releaseDateRegexp).required(),
 });
 
 const updateFavoriteSchema = Joi.object({
