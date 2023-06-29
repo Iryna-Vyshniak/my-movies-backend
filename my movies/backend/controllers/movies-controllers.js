@@ -47,9 +47,10 @@ const getMovieById = async (req, res, next) => {
 };
 
 // add id owner for every add movies
-const addMovie = async (req, res, next) => {
+const addMovie = async (req, res) => {
   const { _id: owner } = req.user;
   const result = await Movie.create({ ...req.body, owner });
+
   res.status(201).json(result);
 };
 
