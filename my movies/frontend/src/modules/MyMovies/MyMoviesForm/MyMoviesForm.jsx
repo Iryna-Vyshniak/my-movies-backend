@@ -60,7 +60,7 @@ const MyMoviesForm = ({ onSubmit }) => {
           mask='9999'
           onChange={handleChange}
           className={styles.textField}
-          placeholder='Book date'
+          placeholder='Year'
           required
         />
       </div>
