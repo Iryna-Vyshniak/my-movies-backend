@@ -1,0 +1,106 @@
+[
+  {
+    "_id": {
+      "$oid": "649b39048d34dda1b146a9c2"
+    },
+    "title": "Avatar: way of water",
+    "director": "James Cameron",
+    "favorite": false,
+    "genre": "fantastic",
+    "date": "15-01-2023",
+    "owner": {
+      "$oid": "649b26b1566b2b32f187865b"
+    },
+    "createdAt": {
+      "$date": "2023-06-27T19:31:16.369Z"
+    },
+    "updatedAt": {
+      "$date": "2023-06-27T19:31:16.369Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "649b3cb4f68de253725333d5"
+    },
+    "title": "Game of Thrones",
+    "director": "N/A",
+    "favorite": false,
+    "genre": "fantastic",
+    "date": "17-04-2011",
+    "owner": {
+      "$oid": "649b26b1566b2b32f187865b"
+    },
+    "createdAt": {
+      "$date": "2023-06-27T19:47:00.138Z"
+    },
+    "updatedAt": {
+      "$date": "2023-06-27T19:47:00.138Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "649b3ce1f68de253725333d8"
+    },
+    "title": "Vikings",
+    "director": "N/A",
+    "favorite": false,
+    "genre": "drama",
+    "date": "03-03-2013",
+    "owner": {
+      "$oid": "649b26b1566b2b32f187865b"
+    },
+    "createdAt": {
+      "$date": "2023-06-27T19:47:45.161Z"
+    },
+    "updatedAt": {
+      "$date": "2023-06-27T19:47:45.161Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "649b3d00f68de253725333db"
+    },
+    "title": "Gotham",
+    "director": "N/A",
+    "favorite": false,
+    "genre": "drama",
+    "date": "03-03-2014",
+    "owner": {
+      "$oid": "649b26b1566b2b32f187865b"
+    },
+    "createdAt": {
+      "$date": "2023-06-27T19:48:16.986Z"
+    },
+    "updatedAt": {
+      "$date": "2023-06-27T19:48:16.986Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "649b3d20f68de253725333de"
+    },
+    "title": "Narcos",
+    "director": "N/A",
+    "favorite": false,
+    "genre": "drama",
+    "date": "03-03-2015",
+    "owner": {
+      "$oid": "649b26b1566b2b32f187865b"
+    },
+    "createdAt": {
+      "$date": "2023-06-27T19:48:48.976Z"
+    },
+    "updatedAt": {
+      "$date": "2023-06-27T19:48:48.976Z"
+    }
+  },
+  {
+    "email": "alex@gmail.com",
+    "password": "123456"
+  },
+  {
+    "email": "tom@yahoo.com",
+    "password": "123456"
+  },
+  {}
+]
