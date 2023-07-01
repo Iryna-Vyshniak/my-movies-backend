@@ -3,7 +3,7 @@ const express = require('express');
 const moviesController = require('../../controllers/movies-controllers');
 const { schemas } = require('../../models/movie');
 const { validateBody } = require('../../decorators');
-const { isValidId, authenticate } = require('../../middlewares');
+const { isValidId, authenticate, upload } = require('../../middlewares');
 
 const router = express.Router();
 
@@ -13,7 +13,15 @@ router.get('/', authenticate, moviesController.getAllMovies);
 
 router.get('/:id', authenticate, isValidId, moviesController.getMovieById);
 
-router.post('/', authenticate, validateBody(schemas.movieAddSchema), moviesController.addMovie);
+// якщо очікуємо файли в декількох полях: upload.fields([{name: 'poster', maxCount: 1}, {name: 'second-poster', maxCount: 2}])
+// якщо очікуємо якусь кількість файлів upload.array('poster', 8)
+router.post(
+  '/',
+  upload.single('poster'),
+  authenticate,
+  validateBody(schemas.movieAddSchema),
+  moviesController.addMovie
+);
 
 router.put(
   '/:id',
