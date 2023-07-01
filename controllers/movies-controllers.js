@@ -1,3 +1,6 @@
+const fs = require('fs/promises');
+const path = require('path');
+
 // const moviesService = require('../models/movies');
 const { Movie } = require('../models/movie');
 
@@ -5,6 +8,9 @@ const { HttpError } = require('../helpers');
 // const { isValidId } = require('../middlewares');
 
 const { ctrlWrapper } = require('../decorators');
+
+// add path
+const moviesPath = path.resolve('public', 'movies');
 
 // add movie`s owner and get movies who added them
 // add populate() - інструмент пошуку для поширення запиту - в колекції знаходить поле owner і замінює його розширеними даними
@@ -47,9 +53,18 @@ const getMovieById = async (req, res, next) => {
 };
 
 // add id owner for every add movies
+// add poster
 const addMovie = async (req, res) => {
+  // console.log(req.body);
+  // console.log(req.file);
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(moviesPath, filename);
+  await fs.rename(oldPath, newPath);
+  const poster = path.join('movies', filename);
+
   const { _id: owner } = req.user;
-  const result = await Movie.create({ ...req.body, owner });
+
+  const result = await Movie.create({ ...req.body, poster, owner });
 
   res.status(201).json(result);
 };
