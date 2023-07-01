@@ -11,9 +11,10 @@ const storage = multer.diskStorage({
   destination,
   // зберігаємо файл,який отримуємо, під іншим ім'ям завдяки ф-ції filename (ex: same name)
   filename: (req, file, cb) => {
-    const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const newName = `${uniquePrefix}_${file.originalname}`;
-    cb(null, newName);
+    const uniquePreffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const { originalname } = file;
+    const newFileName = `${uniquePreffix}_${originalname}`;
+    cb(null, newFileName);
   },
 });
 
@@ -25,6 +26,7 @@ const limits = {
 const fileFilter = (req, file, cb) => {
   const { mimetype } = file;
   console.log(mimetype);
+
   if (mimetype !== 'image/jpeg' || mimetype !== 'image/png') {
     cb(HttpError(400, 'File can have only .jpg or .png extension'), false);
   }
