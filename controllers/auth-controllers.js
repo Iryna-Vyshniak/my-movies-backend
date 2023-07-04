@@ -1,14 +1,15 @@
 const bcrypt = require('bcryptjs');
 // for token
 const jwt = require('jsonwebtoken');
+const { randomUUID } = require('crypto');
 
 const { User } = require('../models/user');
 
-const { HttpError } = require('../helpers');
+const { HttpError, sendEmail } = require('../helpers');
 
 const { ctrlWrapper } = require('../decorators');
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 
 /* const createHashPassword = async (password) => {
   hash password
@@ -69,8 +70,19 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const verificationCode = randomUUID();
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({ ...req.body, password: hashPassword, verificationCode });
+
+  const verifyEmail = {
+    // тому, хто щойно зареєструвався
+    to: email,
+    subject: 'Verify email',
+    // лінк на наш роут на бекенді, який перевіряє, чи є такий email
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationCode}">Click to verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
 
   // add token
   const { _id: id } = newUser;
@@ -86,6 +98,52 @@ const register = async (req, res) => {
   });
 };
 
+// verify email
+
+const verify = async (req, res) => {
+  const { verificationCode } = req.params;
+  // перевіряємо чи є такий користувач в базі
+  const user = await User.findOne({ verificationCode });
+
+  if (!user) {
+    throw HttpError(401);
+  }
+
+  await User.findByIdAndUpdate(user._id, { verify: true, verificationCode: '' });
+
+  res.json({
+    message: 'Verification Email Success',
+  });
+};
+
+const resendVerify = async (req, res) => {
+  const { email } = req.body;
+  // перевіряємо чи є такий користувач в базі
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw HttpError(401);
+  }
+  if (user.verify) {
+    throw HttpError(400, 'Email already verify');
+  }
+
+  const verifyEmail = {
+    // тому, хто щойно зареєструвався
+    to: email,
+    subject: 'Verify email',
+    // лінк на наш роут на бекенді, який перевіряє, чи є такий email
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationCode}">Click to verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
+  res.json({
+    message: 'Verify email send success',
+  });
+};
+
+// signin
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -94,6 +152,9 @@ const login = async (req, res) => {
   // 401 - не авторизований
   if (!user) {
     throw HttpError(401, 'Email or password invalid');
+  }
+  if (!user.verify) {
+    throw HttpError(401, 'Not verify email');
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -142,6 +203,8 @@ const logout = async (req, res) => {
 
 module.exports = {
   register: ctrlWrapper(register),
+  verify: ctrlWrapper(verify),
+  resendVerify: ctrlWrapper(resendVerify),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
