@@ -26,7 +26,17 @@ const userSchema = new Schema(
       type: String,
       default: '',
     },
+    // add verify
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    // код для верифікації, який відправляємо на пошту
+    verificationCode: {
+      type: String,
+    },
   },
+
   { versionKey: false, timestamps: true }
 );
 
